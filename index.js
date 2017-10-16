@@ -3,11 +3,21 @@ const app     = express();
 
 const bodyParser = require('body-parser');
 const methodOverride = require('method-override');
+const session  = require('express-session');
+
+app.use(session({
+  secret: 'this is some randome secret string you make up that is used to unlock the hash, dont share this with anyone',
+  resave: false,
+  saveUnitialized: false
+}))
+
+
+
 require('./db/db')
 
 // require our controllers
 const userController = require('./controllers/user')
-
+const candyController = require('./controllers/candy')
 
 // tell express where are view is
 app.set('view engine', 'ejs');
@@ -27,6 +37,7 @@ app.use(express.static('public'));
 // so the first route in the controller is
 // now /fruits/fruits
 app.use('/users', userController)
+app.use('/candy', candyController)
 
 
 

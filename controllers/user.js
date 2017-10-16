@@ -11,9 +11,6 @@ router.get('/', (req, res) => {
 router.post('/register', (req, res) => {
   console.log(req.body)
 
-
-
-
   User.findOne({username: req.body.username}, (err, user) => {
     if(err){
       res.send(err)
@@ -32,7 +29,9 @@ router.post('/register', (req, res) => {
               res.send('error creating user')
             } else {
 
-              res.send(user)
+              req.session.logged = true;
+              req.session.username = user.username;
+              res.redirect('/users/profile')
             }
           })
       } else {
@@ -43,13 +42,16 @@ router.post('/register', (req, res) => {
 })
 
 router.get('/profile', (req, res) => {
-  res.send('THis is the profile page')
+  console.log('---------------------------------------')
+  console.log(req.session)
+  console.log('---------------------------------------')
+  res.render('profile', {username: req.session.username})
 })
 
 
 // Create a login view
 router.get('/login', (req, res) => {
-  res.render('login', {})
+  res.render('login', {message: ''})
 })
 // create a login route
 router.post('/login', (req, res) => {
@@ -63,13 +65,15 @@ router.post('/login', (req, res) => {
             if(user){
 
                     if(bcrypt.compareSync(req.body.password, user.password)){
+                      req.session.logged = true;
+                      req.session.username = user.username;
                       res.redirect('/users/profile')
                     } else {
-                      res.send('Login was incorrect')
+                      res.render('login', {message: 'login incorrect'})
                     }
 
             } else {
-              res.send('Login was incorrect')
+               res.render('login', {message: 'login incorrect'})
             }
     }
   })
@@ -78,22 +82,6 @@ router.post('/login', (req, res) => {
 
 })
 // Use the bcrypt.compareSync('plain text password', 'hash')
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 module.exports = router;
