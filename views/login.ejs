@@ -7,17 +7,14 @@
   <link rel="stylesheet" href="">
 </head>
 <body>
-  <h1>Hello</h1>
 
-  <form action="/users/register" method="Post">
+  <form action="/users/login" method="Post">
     <input type="text" name="username">
     <input type="password" name="password">
-    <button type="submit">Register</button>
+    <button type="submit">Login</button>
   </form>
 
-  <% if(message){ %>
-      <%= message %>
-   <% } %>
+
 
 </body>
 </html>
